@@ -17,7 +17,7 @@ const features = [
   {
     title: "Make Your Money Work for You",
     description:
-      "Invest your money efficiently with Nova's automated savings features.",
+      "Invest your money efficiently with Nova&apos;s automated savings features.",
   },
   {
     title: "Pay and get paid your way",
@@ -47,7 +47,7 @@ const testimonials = [
   },
   {
     quote:
-      "A seamless experience from sign-up to everyday banking. Nova’s features are exactly what I needed.",
+      "A seamless experience from sign-up to everyday banking. Nova&rsquo;s features are exactly what I needed.",
     author: "John K.",
     role: "Small Business Owner",
   },
@@ -58,10 +58,16 @@ function TestimonialSlider() {
   const [current, setCurrent] = useState(0);
   const testimonialCount = testimonials.length;
 
-  const nextTestimonial = () =>
-    setCurrent((prev) => (prev + 1) % testimonialCount);
+  const nextTestimonial = React.useCallback(() =>
+    setCurrent((prev) => (prev + 1) % testimonialCount), [testimonialCount]);
+
   const prevTestimonial = () =>
     setCurrent((prev) => (prev - 1 + testimonialCount) % testimonialCount);
+
+  React.useEffect(() => {
+    const timer = setInterval(nextTestimonial, 5000);
+    return () => clearInterval(timer);
+  }, [nextTestimonial]);
 
   return (
     <div className="relative w-full max-w-4xl mx-auto mt-16">
@@ -72,34 +78,38 @@ function TestimonialSlider() {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -50 }}
           transition={{ duration: 0.5 }}
-          className="bg-white rounded-xl p-8 shadow-lg"
+          className="bg-white dark:bg-zinc-900 rounded-xl p-8 shadow-lg border dark:border-gray-800 min-h-[200px] flex flex-col justify-center"
         >
-          <p className="text-lg italic text-gray-700 mb-4">
-            "{testimonials[current].quote}"
+          <p className="text-lg italic text-gray-700 dark:text-gray-300 mb-4">
+            &quot;{testimonials[current].quote}&quot;
           </p>
           <div className="text-right">
-            <p className="font-bold text-gray-900">
+            <p className="font-bold text-gray-900 dark:text-white">
               {testimonials[current].author}
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               {testimonials[current].role}
             </p>
           </div>
         </motion.div>
       </AnimatePresence>
       <div className="flex justify-between mt-4">
-        <button
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={prevTestimonial}
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+          className="px-4 py-2 bg-gray-200 dark:bg-gray-800 dark:text-white rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
         >
           Prev
-        </button>
-        <button
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={nextTestimonial}
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+          className="px-4 py-2 bg-gray-200 dark:bg-gray-800 dark:text-white rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
         >
           Next
-        </button>
+        </motion.button>
       </div>
     </div>
   );
@@ -140,17 +150,17 @@ function FeatureSection() {
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: isLeftInView ? 1 : 0, x: isLeftInView ? 0 : -50 }}
           transition={{ duration: 0.5 }}
-          className="h-[450px] relative w-[40%] max-sm:w-full flex gap-2 bg-white rounded-xl p-10 shadow-lg overflow-hidden"
+          className="h-[450px] relative w-[40%] max-sm:w-full flex gap-2 bg-white dark:bg-zinc-900 rounded-xl p-10 shadow-lg overflow-hidden border dark:border-gray-800"
         >
           {/* Background overlay pattern */}
-          <div className="absolute inset-0 bg-gradient-to-br from-white to-transparent opacity-20"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-white to-transparent dark:from-zinc-800 dark:to-transparent opacity-20"></div>
           <div className="w-64 relative z-10">
             <div className="h-40"></div>
-            <div className="text-4xl font-bold">
+            <div className="text-4xl font-bold dark:text-white">
               ONLINE BANKING THAT TAKES YOUR BUSINESS TO THE{" "}
               <span className="text-[#FD5339]">NEXT LEVEL</span>
             </div>
-            <div className="text-sm text-gray-400 mt-6">
+            <div className="text-sm text-gray-400 dark:text-gray-500 mt-6">
               Monitor all your purchases in one place, and freeze or unfreeze
               your cards in a few taps.
             </div>
@@ -180,19 +190,19 @@ function FeatureSection() {
             x: isRightInView ? 0 : 50,
           }}
           transition={{ duration: 0.5 }}
-          className="w-full lg:w-[55%] bg-[#F6F6F6] rounded-xl shadow-md"
+          className="w-full lg:w-[55%] bg-[#F6F6F6] dark:bg-zinc-900 rounded-xl shadow-md overflow-hidden border dark:border-gray-800 transition-colors duration-300"
         >
           <div className="flex text-lg">
-            <div className="bg-white py-4 px-8 rounded-tl-xl flex justify-center">
-              <div className="bg-[#FD5339] px-4 h-8 flex items-center rounded-full text-white">
+            <div className="bg-white dark:bg-zinc-800 py-4 px-8 rounded-tl-xl flex justify-center border-r border-b dark:border-gray-700">
+              <div className="bg-[#FD5339] px-4 h-8 flex items-center rounded-full text-white font-bold text-sm">
                 BENEFITS
               </div>
             </div>
-            <div className="bg-[#F6F6F6] flex flex-wrap max-sm:gap-1 gap-4 w-full px-4 rounded-tr-xl">
+            <div className="bg-[#F6F6F6] dark:bg-zinc-900 flex flex-wrap max-sm:gap-1 gap-4 w-full px-4 rounded-tr-xl border-b dark:border-gray-800">
               {["Invoice", "Integration", "Partner Perks", "Nova Boost"].map(
                 (item) => (
                   <div key={item} className="py-2">
-                    <div className="bg-[#E5E4E4] px-4 py-1 rounded-full text-sm">
+                    <div className="bg-[#E5E4E4] dark:bg-zinc-800 dark:text-gray-300 px-4 py-1 rounded-full text-sm font-medium border dark:border-gray-700">
                       {item}
                     </div>
                   </div>
@@ -201,7 +211,35 @@ function FeatureSection() {
             </div>
           </div>
 
-          <div className="bg-white w-full p-8 rounded-b-xl space-y-6">
+          <div className="p-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {features.map((feature, index) => (
+                <div key={index} className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-[#FD5339] w-2 h-2 rounded-full"></div>
+                    <h3 className="text-xl font-bold dark:text-white">{feature.title}</h3>
+                  </div>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-12 p-6 bg-white dark:bg-zinc-800 rounded-xl border dark:border-gray-700 shadow-sm">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-lg">
+                  <RiShieldCheckFill className="text-2xl text-[#FD5339]" />
+                </div>
+                <div>
+                  <h4 className="font-bold dark:text-white">Security First</h4>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Your data is always encrypted</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-zinc-900 w-full p-8 rounded-b-xl space-y-6">
             {features.map((feature, index) => (
               <div key={index}>
                 <div
@@ -210,7 +248,7 @@ function FeatureSection() {
                 >
                   <motion.h3
                     className={`text-xl font-medium ${
-                      expanded === index ? "text-[#FD5339]" : "text-black"
+                      expanded === index ? "text-[#FD5339]" : "text-black dark:text-white"
                     }`}
                   >
                     {feature.title}
@@ -230,13 +268,13 @@ function FeatureSection() {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <p className="text-sm text-gray-500 mt-2 w-96">
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 w-96">
                         {feature.description}
                       </p>
                     </motion.div>
                   )}
                 </AnimatePresence>
-                <hr className="border-2 border-gray-300 mt-4" />
+                <hr className="border-2 border-gray-300 dark:border-zinc-700 mt-4" />
               </div>
             ))}
           </div>
@@ -249,16 +287,16 @@ function FeatureSection() {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 50 }}
         transition={{ duration: 0.8 }}
-        className="bg-white rounded-xl p-8 md:p-14 w-full mx-auto shadow-xl"
+        className="bg-white dark:bg-zinc-900 rounded-xl p-8 md:p-14 w-full mx-auto shadow-xl border dark:border-gray-800"
       >
         <div className="flex flex-col md:flex-row md:justify-around gap-8">
           <div className="text-center md:text-left flex items-center justify-center md:justify-start">
             <div>
-              <div className="flex gap-2 text-2xl items-center">
+              <div className="flex gap-2 text-2xl items-center dark:text-white">
                 <RiShieldCheckFill className="text-[#FD5339] text-3xl" />
                 <span>FDIC insured</span>
               </div>
-              <div className="text-sm text-gray-500 mt-2 max-w-xs">
+              <div className="text-sm text-gray-500 dark:text-gray-400 mt-2 max-w-xs">
                 Your deposits are insured for up to $250,000 through our
                 partner bank, Middlesex Federal Savings.
               </div>
@@ -266,22 +304,22 @@ function FeatureSection() {
           </div>
 
           <div className="text-center md:text-left">
-            <div className="flex gap-2 text-2xl items-center">
+            <div className="flex gap-2 text-2xl items-center dark:text-white">
               <MdLock className="text-[#FD5339] text-3xl" />
               <span>Powerful security</span>
             </div>
-            <div className="text-sm text-gray-500 mt-2 max-w-xs mx-auto md:mx-0">
+            <div className="text-sm text-gray-500 dark:text-gray-400 mt-2 max-w-xs mx-auto md:mx-0">
               Our bank-grade encryption ensures that your information remains
               safe and secure at all times.
             </div>
           </div>
 
           <div className="text-center md:text-left">
-            <div className="flex gap-2 text-2xl items-center">
+            <div className="flex gap-2 text-2xl items-center dark:text-white">
               <FaCreditCard className="text-[#FD5339] text-3xl" />
               <span>Instant card controls</span>
             </div>
-            <div className="text-sm text-gray-500 mt-2 max-w-xs mx-auto md:mx-0">
+            <div className="text-sm text-gray-500 dark:text-gray-400 mt-2 max-w-xs mx-auto md:mx-0">
               Freeze or unfreeze your cards anytime with just a few taps
               through our mobile app.
             </div>

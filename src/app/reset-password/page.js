@@ -1,10 +1,11 @@
 import ResetPasswordPage from "@/pages/ResetPasswordPage"
+import { Suspense } from "react"
 
 function page() {
   return (
-    <div>
+    <Suspense fallback={<div>Loading...</div>}>
       <ResetPasswordPage/>
-    </div>
+    </Suspense>
   )
 }
 

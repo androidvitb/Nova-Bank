@@ -7,7 +7,7 @@ function Footer() {
   const isRegister = pathname && pathname.startsWith("/register"); 
   const isLogin = pathname && pathname.startsWith("/login");
   return (
-    <footer className={`${isLogin || isRegister ? "hidden" : "block"}`}>
+    <footer className={`${isLogin || isRegister ? "hidden" : "block"} bg-white dark:bg-black border-t dark:border-gray-800`}>
       <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div className="md:flex md:justify-between">
           <div>
@@ -16,19 +16,19 @@ function Footer() {
               <img
                 src="/logo_heading.png"
                 alt="logo_heading"
-                className="w-16 h-6"
+                className="w-16 h-6 dark:invert"
               />
             </div>
-            <div className="w-64 text-sm text-gray-400 mt-6">
+            <div className="w-64 text-sm text-gray-400 dark:text-gray-500 mt-6">
               Take your business to new heights with faster cash flow and clear
               financial insights all with a free Novo account. Apply in 10
               Minutes
             </div>
             <div>
               <div className="mt-10 flex space-x-4">
-                <a href="#"><i className="fa-brands fa-facebook fa-xl text-gray-700"></i></a>
-                <a href="#"><i className="fa-brands fa-square-instagram fa-xl text-gray-700"></i></a>
-                <a href="#"><i className="fa-brands fa-square-x-twitter fa-xl text-gray-700"></i></a>
+                <a href="#"><i className="fa-brands fa-facebook fa-xl text-gray-700 dark:text-gray-400"></i></a>
+                <a href="#"><i className="fa-brands fa-square-instagram fa-xl text-gray-700 dark:text-gray-400"></i></a>
+                <a href="#"><i className="fa-brands fa-square-x-twitter fa-xl text-gray-700 dark:text-gray-400"></i></a>
               </div>
               <div></div>
               <div></div>
@@ -39,7 +39,7 @@ function Footer() {
               <h2 className="mb-4 text-xl font-semibold text-[#FD5339] !important">
                 Our Product
               </h2>
-              <ul className="text-gray-400 text-sm dark:text-gray-400">
+              <ul className="text-gray-400 text-sm dark:text-gray-500">
                 <li className="mb-1">
                   <a href="" className="hover:underline">
                     Checking Account
@@ -76,7 +76,7 @@ function Footer() {
               <h2 className="mb-4 text-xl font-semibold text-[#FD5339] !important">
                 Company
               </h2>
-              <ul className="text-gray-400 text-sm dark:text-gray-400">
+              <ul className="text-gray-400 text-sm dark:text-gray-500">
                 <li className="mb-1">
                   <a href="" className="hover:underline">
                     Our Customers
@@ -116,9 +116,9 @@ function Footer() {
             </div>
             <div>
               <h2 className="mb-4 text-xl font-semibold text-[#FD5339] !important">
-                Resource
+                Legal
               </h2>
-              <ul className="text-gray-400 text-sm dark:text-gray-400">
+              <ul className="text-gray-400 text-sm dark:text-gray-500">
                 <li className="mb-1">
                   <a href="" className="hover:underline">
                     Resource Center
@@ -140,7 +140,7 @@ function Footer() {
               <h2 className="mb-4 text-xl font-semibold text-[#FD5339] !important">
                 Our Apps
               </h2>
-              <ul className="text-gray-400 text-sm dark:text-gray-400">
+              <ul className="text-gray-400 text-sm dark:text-gray-500">
                 <li className="mb-1">
                   <a href="" className="hover:underline">
                     Download for iOS

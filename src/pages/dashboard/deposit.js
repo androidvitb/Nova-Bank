@@ -2,6 +2,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { toast, Toaster } from 'react-hot-toast';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import Link from 'next/link';
 
 const Deposit = ({ userId }) => {
   const [amount, setAmount] = useState('');
@@ -30,12 +32,20 @@ const Deposit = ({ userId }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <div className="min-h-screen bg-gray-100 dark:bg-black flex items-center justify-center transition-colors duration-300">
       <Toaster position="top-right" reverseOrder={false} />
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Deposit Funds</h2>
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
+      <div className="bg-white dark:bg-zinc-900 p-8 rounded-lg shadow-lg w-full max-w-md transition-colors duration-300 border dark:border-gray-800">
+        <div className="mb-6 flex justify-center">
+          <Link href="/dashboard" className="text-2xl font-extrabold text-[#FD5339] flex items-center">
+            <img src="/logo.png" alt="Logo" width={40} /> NOVA
+          </Link>
+        </div>
+        <h2 className="text-2xl font-bold mb-6 text-center dark:text-white">Deposit Funds</h2>
         <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="amount">
+          <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="amount">
             Amount
           </label>
           <input
@@ -44,14 +54,14 @@ const Deposit = ({ userId }) => {
             placeholder="Amount"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border dark:border-gray-700 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 dark:bg-zinc-800 leading-tight focus:outline-none focus:ring-2 focus:ring-[#FD5339] transition-all"
           />
         </div>
         <div className="flex items-center justify-between">
           <button
             onClick={handleDeposit}
             disabled={isLoading}
-            className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`w-full bg-[#FD5339] hover:bg-[#d15542] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             {isLoading ? 'Processing...' : 'Deposit'}
           </button>

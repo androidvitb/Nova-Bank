@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { toast, Toaster } from "react-hot-toast";
 import { useAuth } from "../../context/authContext";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 function RegisterPage() {
   const { setIsLoggedIn } = useAuth() || {}; 
@@ -85,9 +86,12 @@ function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
+    <div className="min-h-screen bg-gray-100 dark:bg-black text-gray-900 dark:text-gray-100 flex justify-center transition-colors duration-300">
       <Toaster position="top-right" reverseOrder={false} />
-      <div className="max-w-screen-xl m-0 sm:m-6 bg-white shadow sm:rounded-lg flex items-center justify-center flex-1">
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
+      <div className="max-w-screen-xl m-0 sm:m-6 bg-white dark:bg-zinc-900 shadow sm:rounded-lg flex items-center justify-center flex-1 transition-colors duration-300">
         <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-8">
           <div>
             <Link
@@ -102,7 +106,7 @@ function RegisterPage() {
             <div className="w-full flex-1 justify-center items-center mt-4">
               <div className="mx-auto mt-8">
                 <input
-                  className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                  className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 dark:focus:border-gray-500 focus:bg-white dark:focus:bg-zinc-700 dark:text-white transition-all"
                   type="email"
                   placeholder="Email"
                   value={email}
@@ -111,7 +115,7 @@ function RegisterPage() {
 
                 <div className="relative mt-5">
                   <input
-                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 dark:focus:border-gray-500 focus:bg-white dark:focus:bg-zinc-700 dark:text-white transition-all"
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
                     value={password}
@@ -119,7 +123,7 @@ function RegisterPage() {
                   />
                   <button
                     type="button"
-                    className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                    className="absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-400"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
@@ -128,7 +132,7 @@ function RegisterPage() {
 
                 {!otpSent ? (
                   <button
-                    className="mt-5 tracking-wide font-semibold bg-[#FD5339] text-white w-full py-4 rounded-lg hover:bg-[#d1513d] flex items-center justify-center"
+                    className="mt-5 tracking-wide font-semibold bg-[#FD5339] text-white w-full py-4 rounded-lg hover:bg-[#d1513d] flex items-center justify-center transition-all"
                     onClick={handleSendOTP}
                     disabled={isOtpLoading}
                   >
@@ -141,14 +145,14 @@ function RegisterPage() {
                 ) : (
                   <>
                     <input
-                      className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                      className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 dark:focus:border-gray-500 focus:bg-white dark:focus:bg-zinc-700 dark:text-white mt-5 transition-all"
                       type="text"
                       placeholder="Enter OTP"
                       value={otp}
                       onChange={(e) => setOtp(e.target.value)}
                     />
                     <button
-                      className="mt-5 tracking-wide font-semibold bg-[#FD5339] text-white w-full py-4 rounded-lg hover:bg-[#d1513d] flex items-center justify-center"
+                      className="mt-5 tracking-wide font-semibold bg-[#FD5339] text-white w-full py-4 rounded-lg hover:bg-[#d1513d] flex items-center justify-center transition-all"
                       onClick={handleSignup}
                       disabled={isSignupLoading}
                     >
@@ -161,7 +165,7 @@ function RegisterPage() {
                   </>
                 )}
 
-                <p className="mt-6 text-xs text-gray-600 text-center">
+                <p className="mt-6 text-xs text-gray-600 dark:text-gray-400 text-center">
                   I agree to abide by Nova&lsquo;s{" "}
                   <a href="#" className="border-b border-gray-500 border-dotted">
                     Terms of Service
@@ -173,7 +177,7 @@ function RegisterPage() {
                   .
                 </p>
 
-                <p className="mt-4 text-sm text-gray-600 text-center">
+                <p className="mt-4 text-sm text-gray-600 dark:text-gray-400 text-center">
                   Already have an account?{" "}
                   <Link
                     href="/login"
@@ -187,9 +191,9 @@ function RegisterPage() {
           </div>
         </div>
 
-        <div className="flex-1 h-full bg-gray-200 text-center hidden lg:flex">
+        <div className="flex-1 h-full bg-gray-200 dark:bg-zinc-800 text-center hidden lg:flex transition-colors duration-300">
           <div
-            className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
+            className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat dark:opacity-80"
             style={{ backgroundImage: "url('/Signup.png')" }}
           ></div>
         </div>
