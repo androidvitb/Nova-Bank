@@ -45,12 +45,12 @@ function HeroSection() {
         <div className="w-full lg:w-[30%] relative px-4">
           <div
             className="text-[40px] lg:text-[55px] text-center sm:text-left leading-none absolute max-sm:relative w-full lg:w-[600px] z-20 
-              bg-clip-text text-transparent bg-gradient-to-r from-[#FD5339] to-[#FF7F50] font-extrabold"
+              bg-clip-text text-transparent bg-gradient-to-r from-[#FD5339] to-[#FF7F50] font-extrabold drop-shadow-sm dark:drop-shadow-[0_0_15px_rgba(253,83,57,0.3)]"
           >
             ALL YOUR BUSINESS BANKING IN ONE PLATFORM
           </div>
           <div className="h-32 max-sm:h-0"></div>
-          <div className="pt-20 max-sm:pt-10 max-sm:text-center pb-10 text-gray-400 text-sm lg:text-base">
+          <div className="pt-20 max-sm:pt-10 max-sm:text-center pb-10 text-gray-500 dark:text-gray-400 text-sm lg:text-base">
             Take your business to new heights with faster cash flow and clear
             financial insights—all with a free Novo account. Apply in 10 minutes.
           </div>
@@ -58,25 +58,25 @@ function HeroSection() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex gap-2 max-sm:m-auto border border-gray-300 rounded-full px-4 py-2 items-center text-lg transition-all duration-200"
+              className="flex gap-2 max-sm:m-auto border border-gray-300 dark:border-gray-700 rounded-full px-4 py-2 items-center text-lg transition-all duration-200 hover:bg-gray-50 dark:hover:bg-zinc-800 dark:text-white"
               onClick={handleGetStarted}
             >
-              <img src="/Arrow.png" alt="Arrow" className="w-8" />
+              <img src="/Arrow.png" alt="Arrow" className="w-8 dark:invert" />
               <div>Get Started</div>
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex gap-3 text-black rounded-full px-8 py-2 items-center mt-4 border border-gray-300 transition-all duration-200"
+              className="flex gap-3 text-black dark:text-white rounded-full px-8 py-2 items-center mt-4 border border-gray-300 dark:border-gray-700 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-zinc-800"
               onClick={handleLiveChat}
             >
-              <img src="/Arrow.png" alt="Chat" className="w-7" />
+              <img src="/Arrow.png" alt="Chat" className="w-7 dark:invert" />
               <div>Live Chat</div>
             </motion.button>
           </div>
-          <div className="py-8 max-sm:text-center">
+          <div className="py-8 max-sm:text-center dark:text-gray-300">
             Already Started?{" "}
-            <span className="text-orange-500 cursor-pointer">
+            <span className="text-[#FD5339] font-semibold cursor-pointer hover:underline">
               Finish Application
             </span>
           </div>
@@ -87,30 +87,30 @@ function HeroSection() {
           <img
             src="/heroSection_Image1.png"
             alt="HeroImage"
-            className="w-full h-full object-cover rounded-3xl"
+            className="w-full h-full object-cover rounded-3xl shadow-2xl dark:opacity-80"
           />
           <motion.div
-            className="bg-gray-400/20 text-white backdrop-blur-sm border border-gray-100 rounded-2xl px-4 py-1 absolute top-24 left-8 lg:top-52 lg:left-32 flex gap-2 items-center justify-center"
+            className="bg-white/10 dark:bg-black/40 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-2xl px-4 py-2 absolute top-24 left-8 lg:top-52 lg:left-32 flex gap-2 items-center justify-center shadow-lg"
             variants={fadeInFromLeft}
             initial="hidden"
             animate="visible"
           >
             <img src="/dollar.png" alt="Dollar" className="h-8 lg:h-10" />
             <div>
-              <div className="text-white">Nova Balance</div>
-              <div className="text-xs">$17,500</div>
+              <div className="text-white font-medium">Nova Balance</div>
+              <div className="text-white/80 text-xs">$17,500</div>
             </div>
           </motion.div>
           <motion.div
-            className="bg-gray-400/20 text-white backdrop-blur-sm border border-gray-100 rounded-2xl px-4 py-1 absolute top-40 right-5 lg:top-72 lg:right-10 flex gap-2 items-center justify-center"
+            className="bg-white/10 dark:bg-black/40 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-2xl px-4 py-2 absolute top-40 right-5 lg:top-72 lg:right-10 flex gap-2 items-center justify-center shadow-lg"
             variants={fadeInFromRight}
             initial="hidden"
             animate="visible"
           >
             <img src="/tick.png" alt="Tick" className="h-8 lg:h-10" />
             <div>
-              <div className="text-white">Invoice Paid</div>
-              <div className="text-xs">$900</div>
+              <div className="text-white font-medium">Invoice Paid</div>
+              <div className="text-white/80 text-xs">$900</div>
             </div>
           </motion.div>
         </div>
@@ -120,15 +120,15 @@ function HeroSection() {
           <img
             src="/heroSection_Image2.png"
             alt="HeroImage"
-            className="rounded-2xl w-full h-auto"
+            className="rounded-2xl w-full h-auto shadow-xl dark:opacity-80"
           />
           <div className="mt-8 flex items-center gap-4">
-            <img src="/Arrow.png" alt="HeroImage" className="h-16 lg:h-20" />
+            <img src="/Arrow.png" alt="HeroImage" className="h-16 lg:h-20 dark:invert" />
             <div>
-              <div className="font-medium text-lg lg:text-xl">
+              <div className="font-bold text-lg lg:text-xl dark:text-white">
                 Instant card control
               </div>
-              <div className="text-sm mt-1 text-gray-500">
+              <div className="text-sm mt-1 text-gray-500 dark:text-gray-400">
                 Monitor all your purchases in one place, and freeze or unfreeze
                 your card in just a few taps.
               </div>

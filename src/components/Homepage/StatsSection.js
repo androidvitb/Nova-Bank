@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
 import { motion } from "framer-motion";
@@ -21,9 +22,11 @@ function StatsSection() {
         transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      <img
+      <Image
         src="/StatsSection_Image1.png"
         alt="Stats Visual"
+        width={600}
+        height={400}
         className="w-full lg:w-1/2 object-contain relative z-10"
       />
 
@@ -43,13 +46,13 @@ function StatsSection() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-3xl sm:text-4xl my-6 max-sm:text-center font-bold"
+          className="text-3xl sm:text-4xl my-6 max-sm:text-center font-bold dark:text-white"
         >
           FOR GROWING TEAMS AND THE SELF-EMPLOYED ALIKE
         </motion.div>
 
         <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-center">
-          <p className="text-gray-500 text-sm w-64 max-sm:text-center">
+          <p className="text-gray-500 dark:text-gray-400 text-sm w-64 max-sm:text-center">
             Whether you&apos;re just getting started or employ an established team,
             Novo can help you get your business&apos;s finances in order. Here&apos;s how
             small business customers have found success using Novo&apos;s powerful
@@ -58,22 +61,22 @@ function StatsSection() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="flex gap-2 border border-gray-300 rounded-full px-4 py-2 items-center text-lg transition-all duration-200"
+            className="flex gap-2 border border-gray-300 dark:border-gray-700 rounded-full px-4 py-2 items-center text-lg transition-all duration-200 dark:text-white"
           >
-            <img src="/Arrow.png" alt="Arrow" className="w-6" />
+            <Image src="/Arrow.png" alt="Arrow" width={24} height={24} className="dark:invert" />
             <span>Learn More</span>
           </motion.button>
         </div>
 
         <div className="mt-8">
-          <img src="/StatsSection_Image2.png" alt="Stats Graph" className="w-full" />
+          <Image src="/StatsSection_Image2.png" alt="Stats Graph" width={600} height={300} className="w-full dark:invert" />
 
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 1 }}
-            className="bg-[#e9e9e9] py-6 rounded-b-xl flex flex-wrap justify-around items-center gap-6"
+            className="bg-[#e9e9e9] dark:bg-zinc-900 py-6 rounded-b-xl flex flex-wrap justify-around items-center gap-6 dark:text-white"
           >
             <StatItem value={200000} label="CUSTOMERS" post={"+"} />
             <StatItem value={0} label="MONTHLY FEE" pre={"$"} />
@@ -99,7 +102,7 @@ function StatsSection() {
             Join Thousands of Happy Customers
           </div>
           <div className="mb-4 text-sm">
-            Experience the simplicity and power of Novo's digital banking today.
+            Experience the simplicity and power of Novo&apos;s digital banking today.
           </div>
           <motion.button
             whileHover={{ scale: 1.05 }}

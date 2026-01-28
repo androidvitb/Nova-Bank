@@ -23,9 +23,9 @@ export const config = {
 };
 
 const BalanceWidget = (props) => (
-  <div className="bg-white p-4 rounded-lg shadow-lg">
+  <div className="bg-white dark:bg-zinc-800 p-4 rounded-lg shadow-lg transition-colors border dark:border-gray-700">
     <h3 className="text-[#FD5339] font-bold">Account Balance</h3>
-    <p className="text-gray-600 mt-2">Current Balance: $2,450.00</p>
+    <p className="text-gray-600 dark:text-gray-300 mt-2">Current Balance: $2,450.00</p>
   </div>
 );
 export default config;

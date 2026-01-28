@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background: #F6F6F6;
+  --foreground: #171717;
+  --card: #FFFFFF;
+  --card-foreground: #171717;
+  --border: #E5E7EB;
+  --primary: #FD5339;
+}
+
+.dark {
+  --background: #0A0A0A;
+  --foreground: #EDEDED;
+  --card: #1A1A1A;
+  --card-foreground: #EDEDED;
+  --border: #262626;
+  --primary: #FD5339;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
 .react-chatbot-kit-chat-container {
     width: 350px;
     border-radius: 15px;
@@ -10,6 +33,35 @@
   
   .react-chatbot-kit-chat-message-container {
     background: #f6f6f6;
+  }
+  
+  .dark .react-chatbot-kit-chat-message-container {
+    background: #1a1a1a;
+  }
+
+  .dark .react-chatbot-kit-chat-container {
+    background: #1a1a1a;
+  }
+
+  .dark .react-chatbot-kit-chat-header {
+    background: #262626;
+    color: #EDEDED;
+  }
+
+  .dark .react-chatbot-kit-chat-bot-message {
+    background: #262626;
+    color: #EDEDED;
+  }
+
+  .dark .react-chatbot-kit-chat-input-container {
+    background: #1a1a1a;
+    border-top: 1px solid #262626;
+  }
+
+  .dark .react-chatbot-kit-chat-input {
+    background: #262626;
+    color: #EDEDED;
+    border: 1px solid #333;
   }
   
   .react-chatbot-kit-user-chat-message {
