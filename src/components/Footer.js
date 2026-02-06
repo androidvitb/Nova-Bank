@@ -1,18 +1,24 @@
 "use client"
 import React from "react";
 import Image from "next/image";
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import { usePathname } from "next/navigation";
+import { Facebook, Instagram, Twitter, Linkedin, Github } from "lucide-react";
+import { cn } from "@/lib/utils";
+
 function Footer() {
   const pathname = usePathname();
   const isRegister = pathname && pathname.startsWith("/register"); 
   const isLogin = pathname && pathname.startsWith("/login");
+  
   return (
-    <footer className={`${isLogin || isRegister ? "hidden" : "block"} bg-white dark:bg-black border-t dark:border-gray-800`}>
-      <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
-        <div className="md:flex md:justify-between">
-          <div>
-            <div className="mb-6 md:mb-0 flex gap-2 h-8 items-center">
+    <footer className={cn(
+      "bg-background border-t py-12 px-4 transition-colors duration-300",
+      (isLogin || isRegister) && "hidden"
+    )}>
+      <div className="mx-auto w-full max-w-screen-xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+          <div className="lg:col-span-2">
+            <div className="flex gap-2 items-center mb-6">
               <Image src="/logo.png" alt="logo" width={32} height={32} />
               <Image
                 src="/logo_heading.png"
@@ -22,145 +28,67 @@ function Footer() {
                 className="dark:invert"
               />
             </div>
-            <div className="w-64 text-sm text-gray-400 dark:text-gray-500 mt-6">
+            <p className="text-muted-foreground max-w-xs mb-8 text-sm leading-relaxed">
               Take your business to new heights with faster cash flow and clear
               financial insights all with a free Novo account. Apply in 10
-              Minutes
-            </div>
-            <div>
-              <div className="mt-10 flex space-x-4">
-                <a href="#"><i className="fa-brands fa-facebook fa-xl text-gray-700 dark:text-gray-400"></i></a>
-                <a href="#"><i className="fa-brands fa-square-instagram fa-xl text-gray-700 dark:text-gray-400"></i></a>
-                <a href="#"><i className="fa-brands fa-square-x-twitter fa-xl text-gray-700 dark:text-gray-400"></i></a>
-              </div>
-              <div></div>
-              <div></div>
+              Minutes.
+            </p>
+            <div className="flex gap-4">
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <Facebook className="h-5 w-5" />
+              </a>
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <Instagram className="h-5 w-5" />
+              </a>
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <Twitter className="h-5 w-5" />
+              </a>
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <Linkedin className="h-5 w-5" />
+              </a>
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <Github className="h-5 w-5" />
+              </a>
             </div>
           </div>
-          <div className="grid max-sm:grid-cols-1 mt-6 max-md:grid-cols-2 gap-8 grid-cols-4">
-            <div>
-              <h2 className="mb-4 text-xl font-semibold text-[#FD5339] !important">
-                Our Product
-              </h2>
-              <ul className="text-gray-400 text-sm dark:text-gray-500">
-                <li className="mb-1">
-                  <a href="" className="hover:underline">
-                    Checking Account
-                  </a>
-                </li>
-                <li>
-                  <a href="" className="hover:underline">
-                    Debit Card
-                  </a>
-                </li>
-                <li>
-                  <a href="" className="hover:underline">
-                    Funding
-                  </a>
-                </li>
-                <li>
-                  <a href="" className="hover:underline">
-                    Invoices
-                  </a>
-                </li>
-                <li>
-                  <a href="" className="hover:underline">
-                    Integrations
-                  </a>
-                </li>
-                <li>
-                  <a href="" className="hover:underline">
-                    Partner Perks
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h2 className="mb-4 text-xl font-semibold text-[#FD5339] !important">
-                Company
-              </h2>
-              <ul className="text-gray-400 text-sm dark:text-gray-500">
-                <li className="mb-1">
-                  <a href="" className="hover:underline">
-                    Our Customers
-                  </a>
-                </li>
-                <li>
-                  <a href="" className="hover:underline">
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a href="" className="hover:underline">
-                    Contact Us
-                  </a>
-                </li>
-                <li>
-                  <a href="" className="hover:underline">
-                    Careers
-                  </a>
-                </li>
-                <li>
-                  <a href="" className="hover:underline">
-                    Company News
-                  </a>
-                </li>
-                <li>
-                  <a href="" className="hover:underline">
-                    Press
-                  </a>
-                </li>
-                <li>
-                  <a href="" className="hover:underline">
-                    Partnerships
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h2 className="mb-4 text-xl font-semibold text-[#FD5339] !important">
-                Legal
-              </h2>
-              <ul className="text-gray-400 text-sm dark:text-gray-500">
-                <li className="mb-1">
-                  <a href="" className="hover:underline">
-                    Resource Center
-                  </a>
-                </li>
-                <li>
-                  <a href="" className="hover:underline">
-                    Company News
-                  </a>
-                </li>
-                <li>
-                  <a href="" className="hover:underline">
-                    Help Center
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h2 className="mb-4 text-xl font-semibold text-[#FD5339] !important">
-                Our Apps
-              </h2>
-              <ul className="text-gray-400 text-sm dark:text-gray-500">
-                <li className="mb-1">
-                  <a href="" className="hover:underline">
-                    Download for iOS
-                  </a>
-                </li>
-                <li>
-                  <a href="" className="hover:underline">
-                    Download for Android
-                  </a>
-                </li>
-                <li>
-                  <a href="/login" className="hover:underline">
-                    Log in
-                  </a>
-                </li>
-              </ul>
-            </div>
+
+          <div>
+            <h3 className="font-semibold text-primary mb-4">Our Product</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><a href="#" className="hover:text-foreground transition-colors">Checking Account</a></li>
+              <li><a href="#" className="hover:text-foreground transition-colors">Debit Card</a></li>
+              <li><a href="#" className="hover:text-foreground transition-colors">Funding</a></li>
+              <li><a href="#" className="hover:text-foreground transition-colors">Invoices</a></li>
+              <li><a href="#" className="hover:text-foreground transition-colors">Integrations</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-primary mb-4">Company</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><a href="#" className="hover:text-foreground transition-colors">Our Customers</a></li>
+              <li><a href="#" className="hover:text-foreground transition-colors">About Us</a></li>
+              <li><a href="#" className="hover:text-foreground transition-colors">Contact Us</a></li>
+              <li><a href="#" className="hover:text-foreground transition-colors">Careers</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-primary mb-4">Resources</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><a href="#" className="hover:text-foreground transition-colors">Blog</a></li>
+              <li><a href="#" className="hover:text-foreground transition-colors">Help Center</a></li>
+              <li><a href="#" className="hover:text-foreground transition-colors">Financial Guide</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div className="mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
+          <p>© 2026 Nova Bank. All rights reserved.</p>
+          <div className="flex gap-6">
+            <a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-foreground transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-foreground transition-colors">Cookie Policy</a>
           </div>
         </div>
       </div>

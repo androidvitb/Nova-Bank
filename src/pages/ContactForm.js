@@ -1,6 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { toast, Toaster } from "react-hot-toast";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { Textarea } from "@/components/ui/Textarea";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/Card";
+import { Send, User, Mail, MessageSquare } from "lucide-react";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +15,7 @@ const ContactForm = () => {
     email: "",
     message: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -16,66 +24,97 @@ const ContactForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
     console.log(formData);
-    alert("Your message has been submitted!");
+    toast.success("Your message has been submitted!");
+    setFormData({ name: "", email: "", message: "" });
+    setIsLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 dark:from-black dark:to-zinc-900 p-4 sm:p-6 lg:p-8 pt-24 sm:pt-28 lg:pt-32 transition-colors duration-300">
-      <div className="bg-white dark:bg-zinc-900 p-6 sm:p-8 lg:p-10 rounded-lg shadow-lg w-full max-w-md sm:max-w-lg transition-colors duration-300">
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-4 sm:mb-6 text-center">
-          Get in Touch
-        </h2>
-        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-          <div className="space-y-2">
-            <label htmlFor="name" className="block text-gray-600 dark:text-gray-400 font-medium text-sm sm:text-base">
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              placeholder="Enter your name"
-              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#FD5339] text-sm sm:text-base transition-all"
-            />
-          </div>
-          <div className="space-y-2">
-            <label htmlFor="email" className="block text-gray-600 dark:text-gray-400 font-medium text-sm sm:text-base">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="Enter your email"
-              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#FD5339] text-sm sm:text-base transition-all"
-            />
-          </div>
-          <div className="space-y-2">
-            <label htmlFor="message" className="block text-gray-600 dark:text-gray-400 font-medium text-sm sm:text-base">
-              Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              value={formData.message}
-              onChange={handleInputChange}
-              placeholder="Enter your message"
-              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#FD5339] text-sm sm:text-base resize-none transition-all"
-              rows="4"
-            ></textarea>
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-[#FD5339] text-white py-2 sm:py-3 px-4 rounded-md hover:bg-[#be4937] transition font-medium text-sm sm:text-base"
-          >
-            Submit
-          </button>
-        </form>
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 transition-colors duration-300">
+      <Toaster position="top-right" reverseOrder={false} />
+      
+      <div className="w-full max-w-lg">
+        <Card className="border-none shadow-none bg-transparent sm:bg-card sm:border sm:shadow-sm">
+          <CardHeader className="space-y-1 text-center">
+            <CardTitle className="text-3xl font-bold">Get in Touch</CardTitle>
+            <CardDescription className="text-base">
+              Have questions or feedback? We&apos;d love to hear from you.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="name">Name</Label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="Enter your name"
+                    className="pl-10"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="Enter your email"
+                    className="pl-10"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="message">Message</Label>
+                <div className="relative">
+                  <MessageSquare className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    placeholder="How can we help you?"
+                    className="pl-10 min-h-[120px] resize-none"
+                    required
+                  />
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full h-11 text-base font-semibold"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  "Sending..."
+                ) : (
+                  <>
+                    <Send className="mr-2 h-4 w-4" />
+                    Send Message
+                  </>
+                )}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

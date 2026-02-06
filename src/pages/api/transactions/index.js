@@ -1,4 +1,4 @@
-import { Account } from "../../../../models/Account";
+import Account from "../../../../models/Account";
 
 let usersAccounts = {}; // Temporary in-memory storage (Use database for production)
 

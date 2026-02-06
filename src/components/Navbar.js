@@ -1,13 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRouter, usePathname } from "next/navigation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { Menu, X, ArrowRight } from "lucide-react";
 import Cookies from 'js-cookie';
 import { useAuth } from "../../context/authContext";
 import Link from "next/link";
 import { ThemeToggle } from "./ThemeToggle";
+import { Button } from "./ui/Button";
+import { cn } from "@/lib/utils";
 
 import Image from "next/image";
 
@@ -51,110 +52,108 @@ function Navbar() {
   const isRegister = pathname && pathname.startsWith("/register");
   const isLogin = pathname && pathname.startsWith("/login");
 
-  const menuVariants = {
-    open: { opacity: 1, x: 0 },
-    closed: { opacity: 0, x: "-100%" },
-  };
-
   return (
-    <div className={`fixed top-0 left-0 w-full bg-white dark:bg-black dark:border-b dark:border-gray-800 z-50 py-6 px-4 lg:px-16 ${isLogin || isRegister ? "hidden" : "block"}`}>
+    <nav className={cn(
+      "fixed top-0 left-0 w-full bg-background/80 backdrop-blur-md border-b z-50 py-4 px-4 lg:px-16 transition-colors duration-300",
+      (isLogin || isRegister) && "hidden"
+    )}>
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push("/")}>
           <Image src="/logo.png" alt="logo" width={32} height={32} />
           <Image src="/logo_heading.png" alt="logo_heading" width={64} height={24} className="dark:invert" />
         </div>
-        <div className="hidden lg:flex gap-12 text-lg font-medium text-gray-500 dark:text-gray-400">
+        
+        <div className="hidden lg:flex gap-8 text-sm font-medium text-muted-foreground">
           {isLoggedIn && (
-            <>
-              <Link href="/dashboard" className="hover:text-gray-400 dark:hover:text-gray-200 cursor-pointer">Dashboard</Link>
-              
-            </>
+            <Link href="/dashboard" className="hover:text-foreground transition-colors">Dashboard</Link>
           )}
-          <div className="hover:text-gray-400 dark:hover:text-gray-200 cursor-pointer" onClick={() => handleScrollToSection("solution-section")}>Solution</div>
-          <div className="hover:text-gray-400 dark:hover:text-gray-200 cursor-pointer" onClick={() => handleScrollToSection("resources-section")}>Resources</div>
-          <div className="hover:text-gray-400 dark:hover:text-gray-200 cursor-pointer" onClick={() => handleScrollToSection("result-section")}>Results</div>
-          <div className="hover:text-gray-400 dark:hover:text-gray-200 cursor-pointer" onClick={() => router.push("/contact")}>Contact</div>
+          <button className="hover:text-foreground transition-colors" onClick={() => handleScrollToSection("solution-section")}>Solution</button>
+          <button className="hover:text-foreground transition-colors" onClick={() => handleScrollToSection("resources-section")}>Resources</button>
+          <button className="hover:text-foreground transition-colors" onClick={() => handleScrollToSection("result-section")}>Results</button>
+          <Link href="/contact" className="hover:text-foreground transition-colors">Contact</Link>
         </div>
-        <div className="hidden lg:flex gap-8 items-center">
+
+        <div className="hidden lg:flex gap-4 items-center">
           <ThemeToggle />
           {!isLoggedIn ? (
             <>
-              <div className="text-lg font-medium cursor-pointer dark:text-white" onClick={handleLoginClick}>
-                Log in
-              </div>
-              <button
-                className="flex gap-2 border-[1px] border-gray-300 dark:border-gray-700 rounded-full px-4 py-2 items-center text-lg hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-white"
-                onClick={handleGetStartedClick}
-              >
-                <Image src="/Arrow.png" alt="Arrow" width={24} height={24} className="dark:invert" />
-                <div>Get Started</div>
-              </button>
+              <Button variant="ghost" onClick={handleLoginClick}>Log in</Button>
+              <Button onClick={handleGetStartedClick} className="rounded-full">
+                Get Started
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
             </>
           ) : (
-            <button
-              className="flex gap-2 border-[1px] border-gray-300 dark:border-gray-700 rounded-full px-4 py-2 items-center text-lg hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-white"
-              onClick={handleLogoutClick}
-            >
-              <Image src="/Arrow.png" alt="Arrow" width={24} height={24} className="dark:invert" />
-              <div>Logout</div>
-            </button>
+            <Button variant="outline" onClick={handleLogoutClick} className="rounded-full">
+              Logout
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
           )}
         </div>
+
         <div className="lg:hidden flex items-center gap-4">
           <ThemeToggle />
-          <FontAwesomeIcon
-            icon={isOpen ? faTimes : faBars}
-            onClick={toggleMenu}
-            className="text-2xl cursor-pointer dark:text-white"
-          />
+          <Button variant="ghost" size="icon" onClick={toggleMenu}>
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </Button>
         </div>
       </div>
-      <motion.div
-        className="lg:hidden fixed top-0 left-0 w-3/4 h-full bg-white dark:bg-zinc-900 shadow-lg z-50 p-8 transition-colors duration-300"
-        initial="closed"
-        animate={isOpen ? "open" : "closed"}
-        variants={menuVariants}
-        transition={{ duration: 0.3 }}
-      >
-        <div className="flex flex-col gap-8 text-lg font-medium text-gray-700 dark:text-gray-300">
-          {isLoggedIn && (
-            <>
-              <Link href="/dashboard" className="text-lg font-medium cursor-pointer hover:text-[#FD5339] transition-colors">Dashboard</Link>
-            </>
-          )}
-          <div className="hover:text-[#FD5339] cursor-pointer transition-colors" onClick={() => handleScrollToSection("solution-section")}>Solution</div>
-          <div className="hover:text-[#FD5339] cursor-pointer transition-colors" onClick={() => handleScrollToSection("resources-section")}>Resources</div>
-          <div className="hover:text-[#FD5339] cursor-pointer transition-colors" onClick={() => handleScrollToSection("result-section")}>Results</div>
-          <div className="hover:text-[#FD5339] cursor-pointer transition-colors" onClick={() => router.push("/contact")}>Contact</div>
-          <hr className="border-gray-300 dark:border-gray-700 my-4" />
-          {/* theme edits by shaikhwarsi */}
-          <div className="flex flex-col gap-4">
-            {!isLoggedIn ? (
-              <>
-                <div className="text-lg font-medium cursor-pointer dark:text-white hover:text-[#FD5339] transition-colors" onClick={handleLoginClick}>
-                  Log in
-                </div>
-                <button
-                  className="flex gap-2 border-[1px] border-gray-300 dark:border-gray-700 rounded-full px-4 py-2 items-center text-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                  onClick={handleGetStartedClick}
-                >
-                  <Image src="/Arrow.png" alt="Arrow" width={24} height={24} className="dark:invert" />
-                  <div className="dark:text-white">Get Started</div>
-                </button>
-              </>
-            ) : (
-              <button
-                className="flex gap-2 border-[1px] border-gray-300 dark:border-gray-700 rounded-full px-4 py-2 items-center text-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                onClick={handleLogoutClick}
-              >
-                <Image src="/Arrow.png" alt="Arrow" width={24} height={24} className="dark:invert" />
-                <div className="dark:text-white">Logout</div>
-              </button>
-            )}
-          </div>
-        </div>
-      </motion.div>
-    </div>
+
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={toggleMenu}
+              className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            />
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed top-0 left-0 w-3/4 h-full bg-background border-r shadow-xl z-50 p-8 lg:hidden flex flex-col gap-6"
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <Image src="/logo.png" alt="logo" width={32} height={32} />
+                <Image src="/logo_heading.png" alt="logo_heading" width={64} height={24} className="dark:invert" />
+              </div>
+
+              <div className="flex flex-col gap-4">
+                {isLoggedIn && (
+                  <Link href="/dashboard" className="text-lg font-medium hover:text-primary transition-colors" onClick={toggleMenu}>Dashboard</Link>
+                )}
+                <button className="text-left text-lg font-medium hover:text-primary transition-colors" onClick={() => { handleScrollToSection("solution-section"); toggleMenu(); }}>Solution</button>
+                <button className="text-left text-lg font-medium hover:text-primary transition-colors" onClick={() => { handleScrollToSection("resources-section"); toggleMenu(); }}>Resources</button>
+                <button className="text-left text-lg font-medium hover:text-primary transition-colors" onClick={() => { handleScrollToSection("result-section"); toggleMenu(); }}>Results</button>
+                <Link href="/contact" className="text-lg font-medium hover:text-primary transition-colors" onClick={toggleMenu}>Contact</Link>
+              </div>
+
+              <hr className="my-2" />
+
+              <div className="flex flex-col gap-4">
+                {!isLoggedIn ? (
+                  <>
+                    <Button variant="ghost" className="justify-start text-lg h-auto py-2 px-0" onClick={handleLoginClick}>Log in</Button>
+                    <Button onClick={handleGetStartedClick} className="w-full text-lg h-auto py-3 rounded-full">
+                      Get Started
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </>
+                ) : (
+                  <Button variant="outline" className="w-full text-lg h-auto py-3 rounded-full" onClick={handleLogoutClick}>
+                    Logout
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                )}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </nav>
   );
 }
 

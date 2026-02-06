@@ -3,11 +3,14 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUsers, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { toast, Toaster } from "react-hot-toast";
 import { useAuth } from "../../context/authContext";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/Card";
+import { Eye, EyeOff, UserPlus, Mail, ShieldCheck, KeyRound } from "lucide-react";
 
 function RegisterPage() {
   const { setIsLoggedIn } = useAuth() || {}; 
@@ -27,6 +30,11 @@ function RegisterPage() {
   }, [setIsLoggedIn]);
 
   const handleSendOTP = async () => {
+    if (!email) {
+      toast.error("Please enter your email address");
+      return;
+    }
+
     try {
       setIsOtpLoading(true);
       const response = await fetch("/api/register", {
@@ -55,6 +63,11 @@ function RegisterPage() {
   };
 
   const handleSignup = async () => {
+    if (!otp) {
+      toast.error("Please enter the OTP");
+      return;
+    }
+
     try {
       setIsSignupLoading(true);
       const response = await fetch("/api/register", {
@@ -71,7 +84,6 @@ function RegisterPage() {
         setTimeout(() => router.push("/dashboard"), 2000);
       } else {
         const errorData = await response.json();
-        console.error('Error data:', errorData);
         if (errorData.message === "Email already registered") {
           toast.error("Email already registered! Please log in.");
         } else {
@@ -79,7 +91,6 @@ function RegisterPage() {
         }
       }
     } catch (error) {
-      console.error('Catch error:', error);
       toast.error("An error occurred during signup. Please try again.");
     } finally {
       setIsSignupLoading(false);
@@ -87,116 +98,153 @@ function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-black text-gray-900 dark:text-gray-100 flex justify-center transition-colors duration-300">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 transition-colors duration-300">
       <Toaster position="top-right" reverseOrder={false} />
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-6 right-6">
         <ThemeToggle />
       </div>
-      <div className="max-w-screen-xl m-0 sm:m-6 bg-white dark:bg-zinc-900 shadow sm:rounded-lg flex items-center justify-center flex-1 transition-colors duration-300">
-        <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-8">
-          <div>
-            <Link
-              href="/"
-              className="text-2xl font-extrabold text-[#FD5339] flex items-center"
-            >
-              <Image src="/logo.png" alt="Logo" width={40} height={40} /> NOVA
-            </Link>
-          </div>
 
-          <div className="flex flex-col items-center h-full">
-            <div className="w-full flex-1 justify-center items-center mt-4">
-              <div className="mx-auto mt-8">
-                <input
-                  className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 dark:focus:border-gray-500 focus:bg-white dark:focus:bg-zinc-700 dark:text-white transition-all"
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-
-                <div className="relative mt-5">
-                  <input
-                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 dark:focus:border-gray-500 focus:bg-white dark:focus:bg-zinc-700 dark:text-white transition-all"
+      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-8 items-center">
+        <Card className="w-full max-w-md mx-auto">
+          <CardHeader className="space-y-4">
+            <div className="flex justify-center mb-2">
+              <Link href="/" className="flex items-center gap-2">
+                <Image src="/logo.png" alt="Logo" width={32} height={32} />
+                <span className="text-2xl font-bold text-primary tracking-tighter">NOVA</span>
+              </Link>
+            </div>
+            <CardTitle className="text-2xl text-center">Create Account</CardTitle>
+            <CardDescription className="text-center">
+              Join Nova Bank today and manage your finances with ease.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email Address</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="name@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-10"
+                    disabled={otpSent}
+                    required
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <div className="relative">
+                  <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Password"
+                    placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    className="pl-10 pr-10"
+                    disabled={otpSent}
+                    required
                   />
-                  <button
+                  <Button
                     type="button"
-                    className="absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-400"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                  </button>
-                </div>
-
-                {!otpSent ? (
-                  <button
-                    className="mt-5 tracking-wide font-semibold bg-[#FD5339] text-white w-full py-4 rounded-lg hover:bg-[#d1513d] flex items-center justify-center transition-all"
-                    onClick={handleSendOTP}
-                    disabled={isOtpLoading}
-                  >
-                    {isOtpLoading ? (
-                      <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4 text-muted-foreground" />
                     ) : (
-                      "Send OTP"
+                      <Eye className="h-4 w-4 text-muted-foreground" />
                     )}
-                  </button>
-                ) : (
-                  <>
-                    <input
-                      className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 dark:focus:border-gray-500 focus:bg-white dark:focus:bg-zinc-700 dark:text-white mt-5 transition-all"
-                      type="text"
-                      placeholder="Enter OTP"
+                  </Button>
+                </div>
+              </div>
+
+              {!otpSent ? (
+                <Button 
+                  className="w-full" 
+                  onClick={handleSendOTP} 
+                  disabled={isOtpLoading}
+                >
+                  {isOtpLoading ? (
+                    "Sending OTP..."
+                  ) : (
+                    <>
+                      <ShieldCheck className="h-4 w-4 mr-2" />
+                      Send OTP
+                    </>
+                  )}
+                </Button>
+              ) : (
+                <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-300">
+                  <div className="space-y-2">
+                    <Label htmlFor="otp">Enter OTP</Label>
+                    <Input
+                      id="otp"
+                      placeholder="Enter the 6-digit code"
                       value={otp}
                       onChange={(e) => setOtp(e.target.value)}
+                      className="text-center tracking-[0.5em] font-bold"
                     />
-                    <button
-                      className="mt-5 tracking-wide font-semibold bg-[#FD5339] text-white w-full py-4 rounded-lg hover:bg-[#d1513d] flex items-center justify-center transition-all"
-                      onClick={handleSignup}
-                      disabled={isSignupLoading}
-                    >
-                      {isSignupLoading ? (
-                        <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      ) : (
-                        "Verify & Sign Up"
-                      )}
-                    </button>
-                  </>
-                )}
-
-                <p className="mt-6 text-xs text-gray-600 dark:text-gray-400 text-center">
-                  I agree to abide by Nova&lsquo;s{" "}
-                  <a href="#" className="border-b border-gray-500 border-dotted">
-                    Terms of Service
-                  </a>{" "}
-                  and its{" "}
-                  <a href="#" className="border-b border-gray-500 border-dotted">
-                    Privacy Policy
-                  </a>
-                  .
-                </p>
-
-                <p className="mt-4 text-sm text-gray-600 dark:text-gray-400 text-center">
-                  Already have an account?{" "}
-                  <Link
-                    href="/login"
-                    className="text-[#FD5339] hover:text-[#d15542] font-semibold"
+                  </div>
+                  <Button 
+                    className="w-full" 
+                    onClick={handleSignup} 
+                    disabled={isSignupLoading}
                   >
-                    Login
-                  </Link>
-                </p>
-              </div>
+                    {isSignupLoading ? (
+                      "Signing up..."
+                    ) : (
+                      <>
+                        <UserPlus className="h-4 w-4 mr-2" />
+                        Verify & Sign Up
+                      </>
+                    )}
+                  </Button>
+                  <Button 
+                    variant="link" 
+                    className="w-full text-xs" 
+                    onClick={() => setOtpSent(false)}
+                  >
+                    Change Email Address
+                  </Button>
+                </div>
+              )}
             </div>
-          </div>
-        </div>
 
-        <div className="flex-1 h-full bg-gray-200 dark:bg-zinc-800 text-center hidden lg:flex transition-colors duration-300">
-          <div
-            className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat dark:opacity-80"
-            style={{ backgroundImage: "url('/Signup.png')" }}
-          ></div>
+            <div className="text-center space-y-4">
+              <p className="text-xs text-muted-foreground">
+                By creating an account, you agree to our{" "}
+                <Link href="#" className="underline hover:text-primary">Terms of Service</Link> and{" "}
+                <Link href="#" className="underline hover:text-primary">Privacy Policy</Link>.
+              </p>
+              <p className="text-sm">
+                Already have an account?{" "}
+                <Link href="/login" className="font-semibold text-primary hover:underline">
+                  Sign In
+                </Link>
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="hidden lg:block">
+          <div className="relative aspect-square">
+            <Image
+              src="/Signup.png"
+              alt="Signup illustration"
+              fill
+              className="object-contain dark:opacity-80"
+              priority
+            />
+          </div>
         </div>
       </div>
     </div>

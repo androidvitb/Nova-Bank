@@ -2,7 +2,8 @@
 
 import * as React from 'react'
 import { useTheme } from 'next-themes'
-import { FaSun, FaMoon } from 'react-icons/fa'
+import { Sun, Moon } from 'lucide-react'
+import { Button } from './ui/Button'
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
@@ -14,20 +15,22 @@ export function ThemeToggle() {
   }, [])
 
   if (!mounted) {
-    return <div className="p-2 w-9 h-9" />
+    return <div className="w-9 h-9" />
   }
 
   return (
-    <button
+    <Button
+      variant="ghost"
+      size="icon"
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+      className="rounded-full"
       aria-label="Toggle theme"
     >
       {theme === 'dark' ? (
-        <FaSun className="w-5 h-5 text-yellow-500" />
+        <Sun className="h-5 w-5 text-yellow-500" />
       ) : (
-        <FaMoon className="w-5 h-5 text-gray-600" />
+        <Moon className="h-5 w-5 text-slate-700" />
       )}
-    </button>
+    </Button>
   )
 }

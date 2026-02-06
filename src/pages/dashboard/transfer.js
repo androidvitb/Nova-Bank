@@ -4,11 +4,15 @@ import { useRouter } from 'next/navigation';
 import { toast, Toaster } from 'react-hot-toast';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import Link from 'next/link';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { Label } from '@/components/ui/Label';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/Card';
+import { ArrowLeft, Send } from 'lucide-react';
 
 const Transfer = ({ userId }) => {
   const [amount, setAmount] = useState('');
   const [recipientId, setRecipientId] = useState('');
-  const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -21,67 +25,84 @@ const Transfer = ({ userId }) => {
     setIsLoading(true);
     try {
       const response = await axios.post('/api/transactions', { userId, action: 'transfer', amount, recipientId });
-      setMessage(response.data.message);
       toast.success(response.data.message);
       setTimeout(() => router.push('/dashboard'), 2000);
     } catch (error) {
-      setMessage(error.response.data.message);
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || 'Transfer failed');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-black flex items-center justify-center transition-colors duration-300">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 transition-colors duration-300">
       <Toaster position="top-right" reverseOrder={false} />
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-6 right-6">
         <ThemeToggle />
       </div>
-      <div className="bg-white dark:bg-zinc-900 p-8 rounded-lg shadow-lg w-full max-w-md transition-colors duration-300 border dark:border-gray-800">
-        <div className="mb-6 flex justify-center">
-          <Link href="/dashboard" className="text-2xl font-extrabold text-[#FD5339] flex items-center">
-            <img src="/logo.png" alt="Logo" width={40} /> NOVA
+      
+      <div className="absolute top-6 left-6">
+        <Button variant="ghost" asChild>
+          <Link href="/dashboard">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Dashboard
           </Link>
-        </div>
-        <h2 className="text-2xl font-bold mb-6 text-center dark:text-white">Transfer Funds</h2>
-        <div className="mb-4">
-          <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="recipientId">
-            Recipient ID
-          </label>
-          <input
-            type="text"
-            id="recipientId"
-            placeholder="Recipient ID"
-            value={recipientId}
-            onChange={(e) => setRecipientId(e.target.value)}
-            className="shadow appearance-none border dark:border-gray-700 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 dark:bg-zinc-800 leading-tight focus:outline-none focus:ring-2 focus:ring-[#FD5339] transition-all"
-          />
-        </div>
-        <div className="mb-6">
-          <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="amount">
-            Amount
-          </label>
-          <input
-            type="number"
-            id="amount"
-            placeholder="Amount"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className="shadow appearance-none border dark:border-gray-700 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 dark:bg-zinc-800 leading-tight focus:outline-none focus:ring-2 focus:ring-[#FD5339] transition-all"
-          />
-        </div>
-        <div className="flex items-center justify-between">
-          <button
+        </Button>
+      </div>
+
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-4">
+          <div className="flex justify-center mb-2">
+            <Link href="/dashboard" className="flex items-center gap-2">
+              <img src="/logo.png" alt="Logo" className="w-8 h-8" />
+              <span className="text-2xl font-bold text-primary tracking-tighter">NOVA</span>
+            </Link>
+          </div>
+          <CardTitle className="text-2xl text-center">Transfer Funds</CardTitle>
+          <CardDescription className="text-center">
+            Send money securely to another Nova Bank account.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="recipientId">Recipient ID</Label>
+            <Input
+              id="recipientId"
+              placeholder="Enter recipient's ID"
+              value={recipientId}
+              onChange={(e) => setRecipientId(e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="amount">Amount</Label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+              <Input
+                id="amount"
+                type="number"
+                placeholder="0.00"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="pl-7"
+              />
+            </div>
+          </div>
+          <Button
             onClick={handleTransfer}
             disabled={isLoading}
-            className={`w-full bg-[#FD5339] hover:bg-[#d15542] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className="w-full"
           >
-            {isLoading ? 'Processing...' : 'Transfer'}
-          </button>
-        </div>
-        {message && <p className="mt-4 text-center text-red-500">{message}</p>}
-      </div>
+            {isLoading ? (
+              'Processing...'
+            ) : (
+              <>
+                <Send className="h-4 w-4 mr-2" />
+                Transfer Now
+              </>
+            )}
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 };

@@ -6,13 +6,24 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../../context/authContext";
 import { toast, Toaster } from "react-hot-toast";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/Card";
+import { Eye, EyeOff, LogIn, Mail, CheckCircle2 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/Dialog";
 
 function LoginPage() {
   const { setIsLoggedIn } = useAuth() || {};
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // New state for toggling password visibility
+  const [showPassword, setShowPassword] = useState(false);
   const [isForgotLoading, setIsForgotLoading] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const router = useRouter();
@@ -41,11 +52,9 @@ function LoginPage() {
       } else {
         const errorData = await response.json();
         toast.error(errorData.message || "Invalid credentials");
-        setError(errorData.message || "Login failed");
       }
     } catch (err) {
       toast.error("An unexpected error occurred");
-      setError("An unexpected error occurred.");
     }
   };
 
@@ -79,205 +88,132 @@ function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-black text-gray-900 dark:text-gray-100 flex justify-center transition-colors duration-300">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 transition-colors duration-300">
       <Toaster position="top-right" reverseOrder={false} />
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-6 right-6">
         <ThemeToggle />
       </div>
-      <div className="max-w-screen-xl m-0 sm:m-10 bg-white dark:bg-zinc-900 shadow sm:rounded-lg flex justify-center flex-1 transition-colors duration-300">
-        <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
-          <div>
-            <Link
-              href="/"
-              className="text-2xl font-extrabold text-[#FD5339] flex items-center"
-            >
-              <Image src="/logo.png" alt="Logo" width={40} height={40} /> NOVA
-            </Link>
-          </div>
-          <div className="mt-0 flex flex-col items-center">
-            <div className="w-full flex-1 mt-8">
-              <div className="my-12 border-b dark:border-gray-800 text-center">
-                <div className="leading-none px-2 inline-block text-sm text-gray-600 dark:text-gray-400 tracking-wide font-medium bg-white dark:bg-zinc-900 transform translate-y-1/2 transition-colors duration-300">
-                  Sign In with Nova E-mail
-                </div>
-              </div>
 
-              <div className="mx-auto">
-                <form onSubmit={handleLogin}>
-                  <input
-                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 dark:focus:border-gray-500 focus:bg-white dark:focus:bg-zinc-700 dark:text-white transition-all"
+      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-8 items-center">
+        <div className="hidden lg:block">
+          <div className="relative aspect-square">
+            <Image
+              src="/Login.png"
+              alt="Login illustration"
+              fill
+              className="object-contain dark:opacity-80"
+              priority
+            />
+          </div>
+        </div>
+
+        <Card className="w-full max-w-md mx-auto">
+          <CardHeader className="space-y-4">
+            <div className="flex justify-center mb-2">
+              <Link href="/" className="flex items-center gap-2">
+                <Image src="/logo.png" alt="Logo" width={32} height={32} />
+                <span className="text-2xl font-bold text-primary tracking-tighter">NOVA</span>
+              </Link>
+            </div>
+            <CardTitle className="text-2xl text-center">Welcome Back</CardTitle>
+            <CardDescription className="text-center">
+              Sign in to your Nova Bank account to continue.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email Address</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="email"
                     type="email"
-                    placeholder="Email"
+                    placeholder="name@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    className="pl-10"
                     required
                   />
-
-                  <div className="relative mt-5">
-                    <input
-                      className="w-full px-8 py-4 pr-12 rounded-lg font-medium bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 dark:focus:border-gray-500 focus:bg-white dark:focus:bg-zinc-700 dark:text-white transition-all"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                    >
-                      {showPassword ? (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          stroke="currentColor"
-                          className="w-5 h-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M3.98 8.66a10.78 10.78 0 0116.04 0M10 14a4 4 0 118 0M21 21l-4-4"
-                          />
-                        </svg>
-                      ) : (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          stroke="currentColor"
-                          className="w-5 h-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M3.98 8.66a10.78 10.78 0 0116.04 0M10 14a4 4 0 118 0M4 4l16 16"
-                          />
-                        </svg>
-                      )}
-                    </button>
-                  </div>
-
-                  <div className="flex justify-between items-center mt-2">
-                    <button
-                      type="button"
-                      onClick={handleForgotPassword}
-                      disabled={isForgotLoading}
-                      className="text-sm text-[#FD5339] hover:text-[#d15542] flex items-center"
-                    >
-                      {isForgotLoading ? (
-                        <>
-                          <div className="w-4 h-4 border-2 border-[#FD5339] border-t-transparent rounded-full animate-spin mr-2"></div>
-                          Sending...
-                        </>
-                      ) : (
-                        "Forgot Password?"
-                      )}
-                    </button>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="mt-5 tracking-wide font-semibold bg-[#FD5339] text-white-500 w-full py-4 rounded-lg hover:bg-[#be4937] transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
-                  >
-                    <svg
-                      className="w-6 h-6 -ml-2"
-                      fill="none"
-                      stroke="white"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                      <circle cx="8.5" cy="7" r="4" />
-                      <path d="M20 8v6M23 11h-6" />
-                    </svg>
-                    <span className="ml-2 text-white">Sign In</span>
-                  </button>
-                </form>
-
-                {error && (
-                  <p className="mt-6 text-xs text-red-600 text-center">
-                    {error}
-                  </p>
-                )}
-
-                <p className="mt-6 text-xs text-gray-600 dark:text-gray-400 text-center">
-                  I agree to abide by Nova&lsquo;s{" "}
-                  <a
-                    href="#"
-                    className="border-b border-gray-500 border-dotted"
-                  >
-                    Terms of Service
-                  </a>{" "}
-                  and its{" "}
-                  <a
-                    href="#"
-                    className="border-b border-gray-500 border-dotted"
-                  >
-                    Privacy Policy
-                  </a>
-                  .
-                </p>
-                <p className="mt-4 text-sm text-gray-600 dark:text-gray-400 text-center">
-                  Don&lsquo;t have an account?{" "}
-                  <Link
-                    href="/register"
-                    className="text-[#FD5339] hover:text-[#d15542] font-semibold"
-                  >
-                    Sign Up
-                  </Link>
-                </p>
+                </div>
               </div>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <Label htmlFor="password">Password</Label>
+                  <Button
+                    type="button"
+                    variant="link"
+                    className="px-0 font-normal text-xs"
+                    onClick={handleForgotPassword}
+                    disabled={isForgotLoading}
+                  >
+                    {isForgotLoading ? "Sending..." : "Forgot Password?"}
+                  </Button>
+                </div>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="pr-10"
+                    required
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                    ) : (
+                      <Eye className="h-4 w-4 text-muted-foreground" />
+                    )}
+                  </Button>
+                </div>
+              </div>
+              <Button type="submit" className="w-full">
+                <LogIn className="h-4 w-4 mr-2" />
+                Sign In
+              </Button>
+            </form>
+
+            <div className="text-center space-y-4">
+              <p className="text-xs text-muted-foreground">
+                By signing in, you agree to our{" "}
+                <Link href="#" className="underline hover:text-primary">Terms of Service</Link> and{" "}
+                <Link href="#" className="underline hover:text-primary">Privacy Policy</Link>.
+              </p>
+              <p className="text-sm">
+                Don&apos;t have an account?{" "}
+                <Link href="/register" className="font-semibold text-primary hover:underline">
+                  Sign Up
+                </Link>
+              </p>
             </div>
-          </div>
-        </div>
-        <div className="flex-1 bg-gray-200 dark:bg-zinc-800 text-center hidden lg:flex transition-colors duration-300">
-          <div
-            className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat dark:opacity-80"
-            style={{
-              backgroundImage: "url('/Login.png')",
-            }}
-          ></div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
 
-      {showConfirmModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-zinc-900 p-8 rounded-lg max-w-md w-full mx-4 transition-colors duration-300">
-            <div className="text-center">
-              <svg
-                className="mx-auto h-12 w-12 text-green-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-              <h3 className="mt-4 text-xl font-bold text-gray-900 dark:text-white">
-                Check your email
-              </h3>
-              <p className="mt-2 text-gray-600 dark:text-gray-400">
-                We&lsquo;ve sent a password reset link to <strong>{email}</strong>
-              </p>
-              <button
-                onClick={() => setShowConfirmModal(false)}
-                className="mt-8 w-full bg-[#FD5339] text-white py-3 rounded-lg font-semibold hover:bg-[#be4937] transition-colors"
-              >
-                Got it
-              </button>
+      <Dialog open={showConfirmModal} onOpenChange={setShowConfirmModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
+              <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />
             </div>
-          </div>
-        </div>
-      )}
+            <DialogTitle className="text-center">Check your email</DialogTitle>
+            <DialogDescription className="text-center">
+              We&apos;ve sent a password reset link to <span className="font-medium text-foreground">{email}</span>
+            </DialogDescription>
+          </DialogHeader>
+          <Button onClick={() => setShowConfirmModal(false)} className="w-full mt-4">
+            Got it
+          </Button>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

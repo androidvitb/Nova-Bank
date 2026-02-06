@@ -5,6 +5,8 @@ import HeroSection from "@/components/Homepage/HeroSection";
 import FeatureSection from "@/components/Homepage/FeatureSection";
 import StatsSection from "@/components/Homepage/StatsSection";
 import SolutionSection from "@/components/Homepage/SolutionSection";
+import { Button } from "@/components/ui/Button";
+import { ArrowUp } from "lucide-react";
 
 function Homepage() {
   const [showButton, setShowButton] = useState(false);
@@ -22,6 +24,7 @@ function Homepage() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -30,7 +33,7 @@ function Homepage() {
   };
 
   return (
-    <div>
+    <div className="bg-background min-h-screen transition-colors duration-300">
       <HeroSection />
       <FeatureSection />
       <StatsSection />
@@ -38,23 +41,13 @@ function Homepage() {
 
       {/* Scroll to top button */}
       {showButton && (
-        <button
+        <Button
           onClick={scrollToTop}
-          style={{
-            position: "fixed",
-            bottom: "20px",
-            right: "20px",
-            backgroundColor: "#007BFF",
-            color: "white",
-            border: "none",
-            borderRadius: "50%",
-            padding: "10px 15px",
-            cursor: "pointer",
-            fontSize: "16px",
-          }}
+          size="icon"
+          className="fixed bottom-6 right-6 rounded-full shadow-lg hover:scale-110 transition-transform z-50"
         >
-          ↑
-        </button>
+          <ArrowUp className="h-5 w-5" />
+        </Button>
       )}
     </div>
   );
