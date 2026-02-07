@@ -13,9 +13,6 @@ export default function TransferPage({ params }) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  // In a real app, we'd get this from context or a session
-  const userId = "user123"; 
-
   const handleTransfer = async () => {
     if (!amount || !recipientId) {
       toast.error('Please fill in all fields');
@@ -24,7 +21,7 @@ export default function TransferPage({ params }) {
 
     setIsLoading(true);
     try {
-      const response = await axios.post('/api/transactions', { userId, action: 'transfer', amount, recipientId });
+      const response = await axios.post('/api/transactions', { action: 'transfer', amount, recipientId });
       setMessage(response.data.message);
       toast.success(response.data.message);
       setTimeout(() => router.push('/dashboard'), 2000);

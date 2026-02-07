@@ -12,9 +12,6 @@ export default function WithdrawPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  // In a real app, we'd get this from context or a session
-  const userId = "user123";
-
   const handleWithdraw = async () => {
     if (!amount) {
       toast.error('Please enter an amount');
@@ -23,7 +20,7 @@ export default function WithdrawPage() {
 
     setIsLoading(true);
     try {
-      const response = await axios.post('/api/transactions', { userId, action: 'withdraw', amount });
+      const response = await axios.post('/api/transactions', { action: 'withdraw', amount });
       setMessage(response.data.message);
       toast.success(response.data.message);
       setTimeout(() => router.push('/dashboard'), 2000);

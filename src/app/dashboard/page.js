@@ -21,14 +21,9 @@ async function getDashboardData() {
     let account = await Account.findOne({ email: session.email });
     
     if (!account) {
-      // Create a default account for demo if it doesn't exist
-      account = {
-        balance: 2450.00,
-        transactions: [
-          { type: 'deposit', amount: 500, date: new Date() },
-          { type: 'withdraw', amount: 200, date: new Date() },
-          { type: 'transfer', amount: 300, date: new Date() },
-        ]
+      return {
+        account: { balance: 0 },
+        transactions: []
       };
     }
 

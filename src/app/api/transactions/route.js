@@ -1,60 +1,105 @@
 import { NextResponse } from 'next/server';
-class Account {
-  constructor(userId) {
-    this.userId = userId;
-    this.balance = 1000; // Default balance
-  }
-  deposit(amount) {
-    this.balance += amount;
-  }
-  withdraw(amount) {
-    if (this.balance >= amount) {
-      this.balance -= amount;
-      return true;
-    }
-    return false;
-  }
-  transfer(amount, recipient) {
-    if (this.withdraw(amount)) {
-      recipient.deposit(amount);
-      return true;
-    }
-    return false;
-  }
-}
-
-// Temporary in-memory storage (In a real app, use a database)
-let usersAccounts = {}; 
+import dbConnect from '@/utils/dbConnect';
+import Account from '@/models/Account';
+import User from '@/models/User';
+import { cookies } from 'next/headers';
 
 export async function POST(req) {
   try {
-    const { userId, action, amount, recipientId } = await req.json();
-
-    if (!usersAccounts[userId]) {
-      usersAccounts[userId] = new Account(userId);
+    await dbConnect();
+    
+    // Get user from session cookie if userId is not provided
+    const cookieStore = cookies();
+    const sessionCookie = cookieStore.get('session');
+    let currentUserEmail = null;
+    
+    if (sessionCookie) {
+      const session = JSON.parse(sessionCookie.value);
+      currentUserEmail = session.email;
     }
 
-    const userAccount = usersAccounts[userId];
+    const { action, amount, recipientId, email: providedEmail } = await req.json();
+    const email = providedEmail || currentUserEmail;
+
+    if (!email) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    let userAccount = await Account.findOne({ email });
+
+    if (!userAccount) {
+      // Create account if it doesn't exist for this user (for demo purposes)
+      const user = await User.findOne({ email });
+      userAccount = await Account.create({
+        userId: user ? user._id : null,
+        email: email,
+        balance: 1000,
+        transactions: []
+      });
+    }
+
     const numAmount = parseFloat(amount);
+    if (isNaN(numAmount) || numAmount <= 0) {
+      return NextResponse.json({ message: "Invalid amount" }, { status: 400 });
+    }
 
     switch (action) {
       case "deposit":
-        userAccount.deposit(numAmount);
+        userAccount.balance += numAmount;
+        userAccount.transactions.push({
+          type: 'Deposit',
+          amount: numAmount,
+          date: new Date()
+        });
+        await userAccount.save();
         return NextResponse.json({ message: "Deposit Successful", balance: userAccount.balance });
 
       case "withdraw":
-        if (userAccount.withdraw(numAmount)) {
+        if (userAccount.balance >= numAmount) {
+          userAccount.balance -= numAmount;
+          userAccount.transactions.push({
+            type: 'Withdrawal',
+            amount: numAmount,
+            date: new Date()
+          });
+          await userAccount.save();
           return NextResponse.json({ message: "Withdrawal Successful", balance: userAccount.balance });
         }
         return NextResponse.json({ message: "Insufficient Funds" }, { status: 400 });
 
       case "transfer":
-        if (!usersAccounts[recipientId]) {
-          // For demo purposes, create the recipient if they don't exist
-          usersAccounts[recipientId] = new Account(recipientId);
+        if (!recipientId) {
+          return NextResponse.json({ message: "Recipient ID required" }, { status: 400 });
         }
 
-        if (userAccount.transfer(numAmount, usersAccounts[recipientId])) {
+        // Find recipient account (by email or userId)
+        let recipientAccount = await Account.findOne({ 
+          $or: [{ email: recipientId }, { userId: recipientId }] 
+        });
+
+        if (!recipientAccount) {
+          return NextResponse.json({ message: "Recipient not found" }, { status: 404 });
+        }
+
+        if (userAccount.balance >= numAmount) {
+          userAccount.balance -= numAmount;
+          userAccount.transactions.push({
+            type: 'Transfer',
+            amount: numAmount,
+            date: new Date(),
+            to: recipientAccount.userId
+          });
+
+          recipientAccount.balance += numAmount;
+          recipientAccount.transactions.push({
+            type: 'Deposit', // Or 'Transfer Received'
+            amount: numAmount,
+            date: new Date(),
+            from: userAccount.userId
+          });
+
+          await userAccount.save();
+          await recipientAccount.save();
           return NextResponse.json({ message: "Transfer Successful", balance: userAccount.balance });
         }
         return NextResponse.json({ message: "Transfer Failed. Insufficient Funds" }, { status: 400 });
@@ -64,6 +109,6 @@ export async function POST(req) {
     }
   } catch (error) {
     console.error("Error in transactions route:", error);
-    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ message: "Internal server error", error: error.message }, { status: 500 });
   }
 }
