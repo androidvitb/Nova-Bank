@@ -6,6 +6,11 @@ const AccountSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   balance: {
     type: Number,
     default: 1000, // Start with fake $1000

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { toast, Toaster } from "react-hot-toast";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "@/context/authContext";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 function RegisterPage() {

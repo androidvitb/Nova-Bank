@@ -1,11 +1,12 @@
+"use client";
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { toast, Toaster } from 'react-hot-toast';
-import { ThemeToggle } from '@/components/ThemeToggle';
 import Link from 'next/link';
+import Image from 'next/image';
 
-const Withdraw = ({ userId }) => {
+export default function WithdrawPage() {
   const [amount, setAmount] = useState('');
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -19,28 +20,25 @@ const Withdraw = ({ userId }) => {
 
     setIsLoading(true);
     try {
-      const response = await axios.post('/api/transactions', { userId, action: 'withdraw', amount });
+      const response = await axios.post('/api/transactions', { action: 'withdraw', amount });
       setMessage(response.data.message);
       toast.success(response.data.message);
       setTimeout(() => router.push('/dashboard'), 2000);
     } catch (error) {
-      setMessage(error.response.data.message);
-      toast.error(error.response.data.message);
+      setMessage(error.response?.data?.message || 'Withdrawal failed');
+      toast.error(error.response?.data?.message || 'Withdrawal failed');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-black flex items-center justify-center transition-colors duration-300">
+    <div className="min-h-[calc(100-72px)] bg-gray-100 dark:bg-black flex items-center justify-center py-12 px-4 transition-colors duration-300">
       <Toaster position="top-right" reverseOrder={false} />
-      <div className="absolute top-4 right-4">
-        <ThemeToggle />
-      </div>
       <div className="bg-white dark:bg-zinc-900 p-8 rounded-lg shadow-lg w-full max-w-md transition-colors duration-300 border dark:border-gray-800">
         <div className="mb-6 flex justify-center">
           <Link href="/dashboard" className="text-2xl font-extrabold text-[#FD5339] flex items-center">
-            <img src="/logo.png" alt="Logo" width={40} /> NOVA
+            <Image src="/logo.png" alt="Logo" width={40} height={40} /> NOVA
           </Link>
         </div>
         <h2 className="text-2xl font-bold mb-6 text-center dark:text-white">Withdraw Funds</h2>
@@ -70,6 +68,4 @@ const Withdraw = ({ userId }) => {
       </div>
     </div>
   );
-};
-
-export default Withdraw;
+}
