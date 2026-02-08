@@ -1,0 +1,30 @@
+import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+import dbConnect from '@/utils/dbConnect';
+import Account from '@/models/Account';
+import { parseSessionCookie } from '@/core/session';
+
+export async function GET() {
+  try {
+    await dbConnect();
+    const sessionCookie = cookies().get('session');
+    const session = parseSessionCookie(sessionCookie?.value);
+
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const account = await Account.findOne({ email: session.email });
+
+    if (!account) {
+      return NextResponse.json({ error: 'Account not found' }, { status: 404 });
+    }
+
+    const recentTransactions = account.transactions.slice(-5).reverse();
+
+    return NextResponse.json({ transactions: recentTransactions });
+  } catch (error: unknown) {
+    console.error('Error in recent transactions:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
